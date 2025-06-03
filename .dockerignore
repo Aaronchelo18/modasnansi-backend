@@ -1,0 +1,33 @@
+# Dependencias
+node_modules
+npm-debug.log
+
+# Archivos de desarrollo
+.git
+.gitignore
+.env
+.env.*
+*.md
+!README.md
+
+# Directorios de pruebas
+test
+coverage
+.nyc_output
+
+# Archivos de construcción
+dist
+build
+
+# Archivos de IDE y editor
+.idea
+.vscode
+*.swp
+*.swo
+
+# Otros
+.DS_Store
+.scannerwork
+docker
+Jenkinsfile
+sonar-project.properties 
