@@ -135,7 +135,10 @@ pipeline {
                         echo "- Host URL: ${SONAR_HOST_URL}"
                         
                         sh """
-                           echo "Ejecutando sonar-scanner..."
+                            echo "Contenido de src antes del análisis:"
+                            find src -type f -name "*.ts" | head -20 || echo "No hay archivos .ts en src"
+                            
+                            echo "Ejecutando sonar-scanner..."
                             ${scannerHome}/bin/sonar-scanner \
                             -Dsonar.projectKey=modasnansi-backend \
                             -Dsonar.projectName='ModasNansi Backend' \
@@ -144,10 +147,10 @@ pipeline {
                             -Dsonar.exclusions=**/*.spec.ts,**/*.test.ts,**/test/**,**/*.js,node_modules/**,dist/** \
                             -Dsonar.sourceEncoding=UTF-8 \
                             -Dsonar.host.url=${SONAR_HOST_URL} \
-                            '-Dsonar.login=$SONAR_TOKEN' \
+                            -Dsonar.login=${SONAR_TOKEN} \
                             -Dsonar.verbose=true
-                            """
-
+                        """
+                        
                         echo "✅ Análisis de SonarQube completado"
                     }
                 }
