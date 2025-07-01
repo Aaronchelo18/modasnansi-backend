@@ -1,50 +1,46 @@
-# .github/workflows/sonar-analysis.yml
+# .github/workflows/docker.yml
 
-name: SonarQube Analysis
+name: Build, Test and Analyze
 
 on:
   push:
     branches:
-      - main # Se ejecuta cuando haces push a la rama main
+      - main
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
   build-and-analyze:
     name: Build, Test and Analyze
-    # ¡Muy importante! Ejecuta esto en tu runner local
-    runs-on: self-hosted 
+    runs-on: self-hosted
 
     steps:
-      # 1. Descarga el código del repositorio
+      # 1. Descarga el código
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # Necesario para que SonarQube pueda analizar correctamente el historial de la rama
           fetch-depth: 0
 
-      # 2. Configura el entorno de Node.js
+      # 2. Configura Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18' # Usa la versión de Node.js de tu proyecto
+          node-version: '18'
 
-      # 3. Instala las dependencias del proyecto
+      # 3. Instala dependencias
       - name: Install dependencies
         run: npm install
 
-      # 4. Ejecuta las pruebas y genera el reporte de cobertura
+      # 4. Ejecuta las pruebas (ESTE PASO DEBE PASAR)
       - name: Run tests and generate coverage
-        run: npm run test:cov # Llama al script que configuraste en package.json
+        run: npm run test:cov
 
       # 5. Ejecuta el análisis de SonarQube
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:
-          # La URL de tu SonarQube. Si el runner no está en la misma red Docker,
-          # usa la IP de la máquina donde corre Docker. Ej: http://192.168.1.100:9000
+          # La URL de tu servidor SonarQube
           SONAR_HOST_URL: http://docker.sonar:9000
           
-          # El token que configuraste en los secrets de GitHub.
-          # El nombre aquí debe coincidir con el nombre del secret.
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_MODASNANSI }}
+          # El token secreto que configuraste en GitHub
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
