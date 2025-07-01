@@ -47,4 +47,4 @@ jobs:
           
           # El token que configuraste en los secrets de GitHub.
           # El nombre aquí debe coincidir con el nombre del secret.
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_MODASNANSI }}
