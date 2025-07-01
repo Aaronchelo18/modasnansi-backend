@@ -15,6 +15,14 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      # =================================================================
+      # === PASO NUEVO: Instalar dependencias del sistema en el runner ===
+      # =================================================================
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y unzip
+      
       # 1. Descarga el código
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,7 +39,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 4. Ejecuta las pruebas (ESTE PASO DEBE PASAR)
+      # 4. Ejecuta las pruebas
       - name: Run tests and generate coverage
         run: npm run test:cov
 
@@ -39,10 +47,5 @@ jobs:
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:
-          # La URL de tu servidor SonarQube
           SONAR_HOST_URL: http://docker.sonar:9000
-          
-          # El token secreto que configuraste en GitHub
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_MODASNANSI }}
-
-          
