@@ -27,6 +27,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          # fetch-depth: 0 es necesario para que SonarQube pueda analizar el historial de Git
           fetch-depth: 0
 
       # 2. Configura Node.js
@@ -39,7 +40,7 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # 4. Ejecuta las pruebas
+      # 4. Ejecuta las pruebas y genera el reporte de cobertura
       - name: Run tests and generate coverage
         run: npm run test:cov
 
@@ -47,5 +48,7 @@ jobs:
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@master
         env:
-          SONAR_HOST_URL: http://docker.sonar:9000
+          # === CORRECCIÓN APLICADA AQUÍ ===
+          # Se usa la dirección IP de tu máquina (obtenida con ipconfig)
+          SONAR_HOST_URL: http://192.168.120.29:9000
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_MODASNANSI }}
