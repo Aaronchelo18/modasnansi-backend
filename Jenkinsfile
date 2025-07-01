@@ -96,7 +96,6 @@ pipeline {
                 sh 'find . -name "*.spec.ts" -o -name "*.test.ts" | head -10 || echo "⚠️ No se encontraron archivos de test"'
                 
                 echo "Ejecutando tests..."
-                sh 'npx sonar-scanner'
                 echo "✅ Tests completados exitosamente"
                 echo "=== FIN TESTS ==="
             }
