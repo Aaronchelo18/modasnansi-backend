@@ -7,8 +7,7 @@ pipeline {
     }
     
     environment {
-        // VERIFICACION: Confirma que la credencial 'sonar-token' existe en Jenkins
-        // VERIFICACION: Verifica que SonarQube esté corriendo en esta URL
+        // La URL de SonarQube es la única variable de entorno que necesitamos aquí.
         SONAR_HOST_URL = 'http://docker.sonar:9000'
     }
     
@@ -106,7 +105,6 @@ pipeline {
                 script {
                     echo "Verificando configuración de SonarQube..."
                     echo "SONAR_HOST_URL: ${SONAR_HOST_URL}"
-                    echo "SONAR_TOKEN está configurado: ${SONAR_TOKEN ? '✅ SÍ' : '❌ NO'}"
                     
                     echo "Verificando conectividad con SonarQube:"
                     sh """
@@ -124,19 +122,12 @@ pipeline {
                     echo "Verificando que el scanner existe:"
                     sh "test -f ${scannerHome}/bin/sonar-scanner && echo '✅ Scanner encontrado' || echo '❌ Scanner NO encontrado'"
                     
+                    // Este bloque maneja la autenticación de forma segura y automática.
+                    // No es necesario pasar el token manualmente.
                     withSonarQubeEnv('sonarqube') {
                         echo "Ejecutando análisis de SonarQube..."
-                        echo "Parámetros del análisis:"
-                        echo "- Project Key: modasnansi-backend"
-                        echo "- Project Name: ModasNansi Backend"
-                        echo "- Sources: src"
-                        echo "- Host URL: ${SONAR_HOST_URL}"
                         
                         sh """
-                            echo "Contenido de src antes del análisis:"
-                            find src -type f -name "*.ts" | head -20 || echo "No hay archivos .ts en src"
-                            
-                            echo "Ejecutando sonar-scanner..."
                             ${scannerHome}/bin/sonar-scanner \
                             -Dsonar.projectKey=modasnansi-backend \
                             -Dsonar.projectName='ModasNansi Backend' \
@@ -203,8 +194,6 @@ pipeline {
         failure {
             echo "💥 PIPELINE FALLÓ"
             echo "❌ Revisa los logs arriba para identificar el problema"
-            echo "❌ Verifica la configuración de herramientas en Jenkins"
-            echo "❌ Confirma que SonarQube esté funcionando"
         }
         unstable {
             echo "⚠️ PIPELINE INESTABLE"
