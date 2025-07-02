@@ -8,7 +8,6 @@ pipeline {
     
     environment {
         // VERIFICACION: Confirma que la credencial 'sonar-token' existe en Jenkins
-        SONAR_TOKEN = credentials('sonarqube')
         // VERIFICACION: Verifica que SonarQube esté corriendo en esta URL
         SONAR_HOST_URL = 'http://docker.sonar:9000'
     }
@@ -146,7 +145,6 @@ pipeline {
                             -Dsonar.exclusions=**/*.spec.ts,**/*.test.ts,**/test/**,**/*.js,node_modules/**,dist/** \
                             -Dsonar.sourceEncoding=UTF-8 \
                             -Dsonar.host.url=${SONAR_HOST_URL} \
-                            -Dsonar.login=${SONAR_TOKEN} \
                             -Dsonar.verbose=true
                         """
                         
